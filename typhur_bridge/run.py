@@ -450,9 +450,27 @@ class TyphurBridge:
                 self.options["mqtt_username"],
                 self.options.get("mqtt_password", "")
             )
+
+        def on_connect(client, userdata, flags, rc, properties=None):
+            # rc==0 means the broker accepted us. connect() only opens the socket
+            # — the broker's verdict arrives here asynchronously. A non-zero rc
+            # (most commonly "Not authorized" for a wrong mqtt_username/password)
+            # otherwise passes silently while every publish is dropped, so surface
+            # it loudly instead of logging a success that never happened.
+            if getattr(rc, "is_failure", rc != 0):
+                log.error(
+                    "HA MQTT broker rejected the connection: %s — check mqtt_host, "
+                    "mqtt_port and mqtt_username/mqtt_password.", rc
+                )
+            else:
+                log.info(
+                    "Connected to HA MQTT: %s:%s",
+                    self.options["mqtt_host"], self.options["mqtt_port"]
+                )
+
+        self.ha_client.on_connect = on_connect
         self.ha_client.connect(self.options["mqtt_host"], self.options["mqtt_port"], 60)
         self.ha_client.loop_start()
-        log.info(f"Connected to HA MQTT: {self.options['mqtt_host']}:{self.options['mqtt_port']}")
 
     def _device_by_id(self, device_id):
         for dev in self.devices:
@@ -708,7 +726,15 @@ class TyphurBridge:
         log.info("Fetching device list...")
         self.devices = get_devices(self.token)
         if not self.devices:
-            log.error("No devices found. Check your credentials or token.")
+            log.error(
+                "No devices found for x-region=%s. The device list is filtered by "
+                "the account's country code, so a valid login can still return an "
+                "empty list: if your account's country differs from the region "
+                "default (e.g. CA / AU / NZ on region 'us'), set 'typhur_country' "
+                "to your ISO country code and restart. Otherwise confirm a device "
+                "is bound to this account in the Typhur app.",
+                TYPHUR_REGION_CODE,
+            )
             raise SystemExit(1)
         log.info(f"Found {len(self.devices)} device(s)")
         for dev in self.devices:
