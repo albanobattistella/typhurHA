@@ -289,7 +289,7 @@ def probe_sensor_defs(device_id, device_name, color):
             "unit": "°C",
             "device_class": "temperature",
             "state_class": "measurement",
-            "value_template": f"{{{{ (({base}.curTemperature | float) / 10 - 32) * 5 / 9 | round(1) }}}}",
+            "value_template": f"{{{{ ((({base}.curTemperature | float) / 10 - 32) * 5 / 9) | round(1) }}}}",
         },
         {
             "uid": f"typhur_{device_id}_{color}_ambient",
@@ -297,7 +297,23 @@ def probe_sensor_defs(device_id, device_name, color):
             "unit": "°C",
             "device_class": "temperature",
             "state_class": "measurement",
-            "value_template": f"{{{{ (({base}.curAmbientTemperature | float) / 10 - 32) * 5 / 9 | round(1) }}}}",
+            "value_template": f"{{{{ ((({base}.curAmbientTemperature | float) / 10 - 32) * 5 / 9) | round(1) }}}}",
+        },
+        {
+            # Target/setpoint temperature. Lives in setParams[0].setTemperature,
+            # which is absent when no cook target is set — guard so the sensor
+            # reports unknown instead of a bogus 0 °C in that case.
+            "uid": f"typhur_{device_id}_{color}_target",
+            "name": f"{device_name} {label} Target Temperature",
+            "unit": "°C",
+            "device_class": "temperature",
+            "state_class": "measurement",
+            "value_template": (
+                f"{{% set sp = {base}.setParams | first %}}"
+                f"{{% if sp is defined and sp.setTemperature is not none %}}"
+                f"{{{{ (((sp.setTemperature | float) / 10 - 32) * 5 / 9) | round(1) }}}}"
+                f"{{% endif %}}"
+            ),
         },
         {
             "uid": f"typhur_{device_id}_{color}_battery",

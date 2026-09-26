@@ -42,6 +42,7 @@ needed. A probe's sensors appear the first time it sends a reading.
 For each probe:
 - **Temperature** (°C)
 - **Ambient Temperature** (°C)
+- **Target Temperature** (°C) — the cook setpoint; unknown when no target is set
 - **Battery** (%)
 - **State** (cooking / charging / idle)
 

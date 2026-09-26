@@ -37,7 +37,7 @@ Add-on details and all config options: [`typhur_bridge/README.md`](typhur_bridge
 
 ## Sensors
 
-Per probe: temperature, ambient temperature, battery, state.
+Per probe: temperature, ambient temperature, target temperature, battery, state.
 Per device: battery, WiFi signal.
 Probe sensors appear the first time a probe sends a reading.
 
