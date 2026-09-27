@@ -301,18 +301,21 @@ def probe_sensor_defs(device_id, device_name, color):
         },
         {
             # Target/setpoint temperature. Lives in setParams[0].setTemperature,
-            # which is absent when no cook target is set — guard so the sensor
-            # reports unknown instead of a bogus 0 °C in that case.
+            # which is absent when no cook target is set. setParams may itself be
+            # missing or null, and the value may be missing, null or 0 — all mean
+            # "no target". Emit "None" (HA maps it to unknown); an empty string
+            # would be ignored and leave the previous target showing.
             "uid": f"typhur_{device_id}_{color}_target",
             "name": f"{device_name} {label} Target Temperature",
             "unit": "°C",
             "device_class": "temperature",
             "state_class": "measurement",
             "value_template": (
-                f"{{% set sp = {base}.setParams | first %}}"
-                f"{{% if sp is defined and sp.setTemperature is not none %}}"
-                f"{{{{ (((sp.setTemperature | float) / 10 - 32) * 5 / 9) | round(1) }}}}"
-                f"{{% endif %}}"
+                f"{{% set sp = ({base}.setParams or []) | first %}}"
+                f"{{% set t = sp.setTemperature if sp is defined and sp is mapping else none %}}"
+                f"{{% if t is defined and t is not none and t | float(0) != 0 %}}"
+                f"{{{{ (((t | float) / 10 - 32) * 5 / 9) | round(1) }}}}"
+                f"{{% else %}}None{{% endif %}}"
             ),
         },
         {
