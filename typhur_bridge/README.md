@@ -25,6 +25,7 @@ Typhur probe  →  Typhur cloud (AWS IoT)  →  Typhur Bridge  →  Local MQTT  
 | `typhur_password` | Your Typhur account password | Yes (or use token) |
 | `typhur_token` | API token (advanced — overrides email/password) | No |
 | `typhur_region` | Your account region: `eu` (Europe) or `us` (US, CA, AU, NZ) | No (default: `eu`) |
+| `typhur_country` | ISO country code sent as the `x-region` header (e.g. `CA`, `AU`, `NZ`). Only needed if your account's country differs from the region default (`US` for `us`, `NO` for `eu`) — otherwise the device list comes back **empty** even though login succeeds. | No |
 | `mqtt_host` | HA MQTT broker hostname | Yes (default: `core-mosquitto`) |
 | `mqtt_port` | MQTT port | Yes (default: `1883`) |
 | `mqtt_username` | MQTT username (if required) | No |
@@ -41,6 +42,7 @@ needed. A probe's sensors appear the first time it sends a reading.
 For each probe:
 - **Temperature** (°C)
 - **Ambient Temperature** (°C)
+- **Target Temperature** (°C) — the cook setpoint; unknown when no target is set
 - **Battery** (%)
 - **State** (cooking / charging / idle)
 
@@ -50,9 +52,11 @@ For the device itself:
 
 ## Notes
 
-- **Tested on the Typhur Sync Quad (WT08) only.** The Sync Dual and other
-  WT-series models should work through the same model-agnostic path but are
-  unverified — feedback from other-model owners is very welcome (open an issue).
+- **Verified on the Typhur Sync Quad (WT08) and Sync One Pro (WT13).** The Sync
+  Dual and other WT-series models should work through the same model-agnostic
+  path but are unverified — feedback from other-model owners is very welcome
+  (open an issue). The WT13 subscribes on `device/WT13/<id>/pub`, supplied
+  directly by the API's `subTopics`.
 - Data is routed via Typhur's cloud (AWS IoT). There is no local-only connection.
 - The MQTT subscribe topic segment differs per model (`WT08` for the Sync Quad,
   `thermometer` for the Sync Dual). The bridge tries the candidates in order,

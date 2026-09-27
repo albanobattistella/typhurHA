@@ -17,10 +17,10 @@ It is model-agnostic: the device model comes from the API and probe sensors are
 created from whatever the device actually reports, so no per-model
 configuration is needed.
 
-> **Tested on the Typhur Sync Quad (WT08) only.** The Sync Dual and other
-> WT-series models *should* work through the same model-agnostic path, but they
-> haven't been verified — feedback from other-model owners is very welcome
-> ([open an issue](https://github.com/oleost/typhurHA/issues)).
+> **Verified on the Typhur Sync Quad (WT08) and Sync One Pro (WT13).** The Sync
+> Dual and other WT-series models *should* work through the same model-agnostic
+> path, but they haven't been verified — feedback from other-model owners is very
+> welcome ([open an issue](https://github.com/oleost/typhurHA/issues)).
 
 ## Install
 
@@ -29,11 +29,15 @@ configuration is needed.
 3. Install **Typhur Bridge**, set `typhur_email` + `typhur_password` (and
    `typhur_region`: `eu` or `us`), and start it.
 
+> If your account's country differs from the region default (e.g. a Canadian
+> account on `us`), also set `typhur_country` to your ISO country code (e.g.
+> `CA`) — otherwise the device list comes back empty even though login succeeds.
+
 Add-on details and all config options: [`typhur_bridge/README.md`](typhur_bridge/README.md).
 
 ## Sensors
 
-Per probe: temperature, ambient temperature, battery, state.
+Per probe: temperature, ambient temperature, target temperature, battery, state.
 Per device: battery, WiFi signal.
 Probe sensors appear the first time a probe sends a reading.
 
