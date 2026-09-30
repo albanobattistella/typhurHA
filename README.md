@@ -1,5 +1,7 @@
 # typhurHA
 
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee&logoColor=black&style=flat)](https://buymeacoffee.com/o1ep)
+
 Home Assistant add-on that connects **Typhur Sync** thermometers (Sync Quad,
 Sync Dual, and other WT-series models) to Home Assistant — without the Typhur
 phone app.
@@ -50,3 +52,7 @@ Probe sensors appear the first time a probe sends a reading.
 - Certificates and token are cached in `/data/` and refreshed automatically.
 - The `SIGN_CONSTANT`, `APP_ID`, and `APP_VERSION` constants in `run.py` are
   extracted from the Typhur APK and are the same for all users — not secrets.
+
+## Support
+
+If this add-on is useful to you, you can [buy me a coffee](https://buymeacoffee.com/o1ep) ☕ — entirely optional, but appreciated.
