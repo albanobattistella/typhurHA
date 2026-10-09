@@ -1,0 +1,37 @@
+configuration:
+  typhur_email:
+    name: Email Typhur
+    description: Il tuo indirizzo email dell'account Typhur. Utilizzato per recuperare e aggiornare automaticamente il token API.
+  typhur_password:
+    name: Password Typhur
+    description: La password del tuo account Typhur. Utilizzata insieme all'email per recuperare automaticamente il token API.
+  typhur_token:
+    name: Token API Typhur (opzionale)
+    description: &gt;-
+      Opzionale. Se fornito, email e password non sono necessarie.
+      Il token viene recuperato e memorizzato automaticamente utilizzando email + password.
+      Scade dopo un certo periodo di tempo: aggiungi email + password per il rinnovo automatico.
+  typhur_region:
+    name: Regione Typhur
+    description: &gt;-
+      La regione in cui è registrato il tuo account Typhur.
+      Usa "eu" per l'Europa (predefinito) oppure "us" per Stati Uniti, Canada, Australia e Nuova Zelanda.
+      Regioni conosciute: eu (api.iot.typhur.de), us (api.iot.typhur.com).
+  typhur_country:
+    name: Codice Paese Typhur (opzionale)
+    description: &gt;-
+      Codice paese ISO a 2 lettere (x-region) opzionale per il tuo account Typhur, ad esempio "US", "GB", "DE", "NO".
+      Lascia vuoto per utilizzare il valore predefinito della regione ("NO" per eu, "US" per us).
+      Imposta questo valore se l'accesso non riesce con l'errore "[x-region] invalid": deve corrispondere al paese in cui è registrato il tuo account.
+  mqtt_host:
+    name: Host MQTT
+    description: Nome host o indirizzo IP del broker MQTT di Home Assistant. Il valore predefinito è "core-mosquitto" per il componente aggiuntivo Mosquitto.
+  mqtt_port:
+    name: Porta MQTT
+    description: Porta del broker MQTT. Il valore predefinito è 1883.
+  mqtt_username:
+    name: Nome utente MQTT
+    description: Nome utente opzionale per il broker MQTT.
+  mqtt_password:
+    name: Password MQTT
+    description: Password opzionale per il broker MQTT.
